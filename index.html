@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بانک اطلاعات خودروهای ایران</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Vazirmatn -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ikco: {
+                            light: '#1e40af',
+                            DEFAULT: '#1d4ed8',
+                            dark: '#1e3a8a'
+                        },
+                        saipa: {
+                            light: '#ea580c',
+                            DEFAULT: '#c2410c',
+                            dark: '#9a3412'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        /* Hide scrollbars for slick mobile view */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300 flex justify-center">
+
+    <!-- Mobile Frame Container (Max width for mobile view desktop, full width on phones) -->
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 min-h-screen shadow-2xl flex flex-col justify-between relative overflow-hidden transition-all duration-300">
+        
+        <!-- Top App Bar -->
+        <header class="sticky top-0 z-40 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <button id="btn-back" onclick="goBack()" class="hidden w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition">
+                    <i class="fa-solid font-bold fa-arrow-right"></i>
+                </button>
+                <h1 id="header-title" class="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-car-side text-blue-600 dark:text-blue-400"></i>
+                    ماشین‌شناسی ایران
+                </h1>
+            </div>
+            
+            <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <i id="theme-icon" class="fa-solid fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto no-scrollbar p-4 relative" id="main-content">
+
+            <!-- STEP 1: COMPANY SELECTION -->
+            <section id="step-companies" class="space-y-6 pt-4 animate-fade-in">
+                <div class="text-center space-y-2">
+                    <h2 class="text-xl font-extrabold text-gray-900 dark:text-white">انتخاب شرکت خودروسازی</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">برای مشاهده مشخصات فنی خودروها، شرکت مورد نظر را انتخاب کنید</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- IKCO Card -->
+                    <div onclick="selectCompany('ikco')" class="group cursor-pointer relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-700 to-blue-900 text-white p-6 shadow-lg hover:shadow-2xl active:scale-[0.98] transition-all duration-300 border border-blue-600/30">
+                        <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500"></div>
+                        <div class="flex justify-between items-center relative z-10">
+                            <div>
+                                <span class="bg-blue-500/30 text-blue-200 text-xs px-2.5 py-1 rounded-full border border-blue-400/20 font-medium">ایران خودرو</span>
+                                <h3 class="text-2xl font-bold mt-2">IKCO</h3>
+                                <p class="text-xs text-blue-100 mt-1 opacity-90">پژو، دنا، تارا، رانا، سمند و...</p>
+                            </div>
+                            <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm text-3xl">
+                                🚙
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-xs font-semibold text-blue-200 group-hover:translate-x-1 transition-transform">
+                            مشاهده تمام محصولات <i class="fa-solid fa-chevron-left mr-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- SAIPA Card -->
+                    <div onclick="selectCompany('saipa')" class="group cursor-pointer relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-600 to-red-800 text-white p-6 shadow-lg hover:shadow-2xl active:scale-[0.98] transition-all duration-300 border border-orange-500/30">
+                        <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-all duration-500"></div>
+                        <div class="flex justify-between items-center relative z-10">
+                            <div>
+                                <span class="bg-orange-500/30 text-orange-200 text-xs px-2.5 py-1 rounded-full border border-orange-400/20 font-medium">سایپا</span>
+                                <h3 class="text-2xl font-bold mt-2">SAIPA</h3>
+                                <p class="text-xs text-orange-100 mt-1 opacity-90">پراید، شاهین، کوییک، ساینا، اطلس و...</p>
+                            </div>
+                            <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm text-3xl">
+                                🚗
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-xs font-semibold text-orange-200 group-hover:translate-x-1 transition-transform">
+                            مشاهده تمام محصولات <i class="fa-solid fa-chevron-left mr-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Quick Info -->
+                <div class="pt-6 border-t border-gray-200 dark:border-gray-700/60 text-center">
+                    <p class="text-xs text-gray-400 dark:text-gray-500">شامل دقیق‌ترین اطلاعات فنی موتور، ترمز، سوخت و کیفیت سواری</p>
+                </div>
+            </section>
+
+            <!-- STEP 2: CAR LIST -->
+            <section id="step-car-list" class="hidden space-y-4 animate-fade-in">
+                <!-- Search Bar -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-gray-400 text-sm"></i>
+                    <input type="text" id="search-input" oninput="filterCars()" placeholder="جستجوی خودرو..." class="w-full pl-4 pr-10 py-2.5 rounded-xl bg-gray-100 dark:bg-gray-700/60 text-gray-800 dark:text-gray-100 text-sm border border-transparent focus:border-blue-500 focus:outline-none transition">
+                </div>
+
+                <!-- Company Badge Header -->
+                <div class="flex items-center justify-between pt-1">
+                    <span id="company-name-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+                        ایران‌خودرو
+                    </span>
+                    <span id="car-count" class="text-xs text-gray-400 font-medium"></span>
+                </div>
+
+                <!-- Cars List Grid -->
+                <div id="cars-container" class="space-y-3 pb-6">
+                    <!-- Dynamically Loaded Cars -->
+                </div>
+            </section>
+
+            <!-- STEP 3: CAR DETAILS MODAL/VIEW -->
+            <section id="step-car-details" class="hidden space-y-4 pb-8 animate-fade-in">
+                <!-- Car Title Header Card -->
+                <div id="details-header-card" class="rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span id="detail-company-tag" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/20 backdrop-blur-sm"></span>
+                        <h2 id="detail-car-name" class="text-2xl font-extrabold mt-1"></h2>
+                        <p id="detail-car-subtitle" class="text-xs opacity-90 mt-0.5"></p>
+                    </div>
+                </div>
+
+                <!-- Detailed Specifications Grid -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-1">مشخصات موتور و فنی</h3>
+                    
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <!-- Horsepower -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">قدرت موتور</span>
+                                <span id="spec-hp" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+
+                        <!-- Engine Name -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">نام موتور</span>
+                                <span id="spec-engine-name" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+
+                        <!-- Engine Capacity -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">حجم موتور</span>
+                                <span id="spec-capacity" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+
+                        <!-- Cylinders -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-cogs"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">تعداد سیلندر</span>
+                                <span id="spec-cylinders" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">مصرف و ابعاد</h3>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <!-- Tank Size -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-gas-pump"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">حجم باک</span>
+                                <span id="spec-tank" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+
+                        <!-- Fuel Consumption -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 block">مصرف ترکیبی</span>
+                                <span id="spec-consumption" class="text-sm font-bold text-gray-800 dark:text-gray-100"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">سواری و ایمنی</h3>
+
+                    <div class="space-y-2.5">
+                        <!-- Brakes -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-halved text-red-500"></i> کیفیت ترمز و سیستم ایمنی
+                                </span>
+                                <span id="spec-brakes-badge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-600"></span>
+                            </div>
+                            <p id="spec-brakes-desc" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-1"></p>
+                        </div>
+
+                        <!-- Handling -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-route text-indigo-500"></i> کیفیت هندلینگ و پایداری
+                                </span>
+                                <span id="spec-handling-badge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-600"></span>
+                            </div>
+                            <p id="spec-handling-desc" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-1"></p>
+                        </div>
+
+                        <!-- Comfort -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-couch text-amber-500"></i> راحتی صندلی‌ها و ارگونومی
+                                </span>
+                                <span id="spec-comfort-badge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-600"></span>
+                            </div>
+                            <p id="spec-comfort-desc" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-1"></p>
+                        </div>
+
+                        <!-- Cabin Space -->
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-teal-500"></i> فضای سرنشینان (جلو و عقب)
+                                </span>
+                                <span id="spec-space-badge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-600"></span>
+                            </div>
+                            <p id="spec-space-desc" class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-1"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Bottom Branding Bar -->
+        <footer class="py-2.5 text-center text-[11px] bg-gray-50 dark:bg-gray-800/90 border-t border-gray-200 dark:border-gray-700 text-gray-400">
+            طراحی شده توسط حاجی میرصادقی | بانک اطلاعاتی خودروها
+        </footer>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database of IKCO and SAIPA Vehicles
+        const database = {
+            ikco: [
+                {
+                    id: 'peugeot-pars-std',
+                    name: 'پژو پارس سال (معمولی)',
+                    subtitle: 'موتور XU7 8-Valve',
+                    hp: '100 اسب بخار',
+                    engineName: 'XU7 JP L3',
+                    capacity: '1768 سی‌سی',
+                    cylinders: '4 سیلندر خطی',
+                    tank: '66 لیتر',
+                    consumption: '9.1 لیتر / 100km',
+                    brakesBadge: 'متوسط (6.5/10)',
+                    brakesDesc: 'جلو دیسکی تهویه‌شونده، عقب کاسه‌ای، مجهز به ABS و EBD. ترمزهای عقب در سرعت بالا داغ می‌کنند.',
+                    handlingBadge: 'خوب (7/10)',
+                    handlingDesc: 'تعادل مناسب در پیچ‌ها به لطف شاسی 405، اما فرمان در سرعت‌های بالا کمی گیج عمل می‌کند.',
+                    comfortBadge: 'متوسط (6.5/10)',
+                    comfortDesc: 'صندلی‌های ساده فابریک با ارگونومی متوسط، صدای موتور در سرعتهای بالا داخل کابین می‌آید.',
+                    spaceBadge: 'عالی (8.5/10)',
+                    spaceDesc: 'فضای بسیار جادار برای پا و سر سرنشینان جلو و عقب. صندوق عقب 470 لیتری بسیار جادار.'
+                },
+                {
+                    id: 'peugeot-pars-lx',
+                    name: 'پژو پارس LX',
+                    subtitle: 'موتور TU5 کم‌مصرف',
+                    hp: '105 اسب بخار',
+                    engineName: 'TU5',
+                    capacity: '1587 سی‌سی',
+                    cylinders: '4 سیلندر 16 سوپاپ',
+                    tank: '66 لیتر',
+                    consumption: '7.5 لیتر / 100km',
+                    brakesBadge: 'خوب (7.5/10)',
+                    brakesDesc: 'جلو دیسکی، عقب دیسکی (در مدل‌های جدیدتر کاسه‌ای)، همراه با ABS، EBD و بوستر ترمز قوی‌تر.',
+                    handlingBadge: 'خوب (7/10)',
+                    handlingDesc: 'فرمان هیدرولیک بسیار نرم، پایداری خوب در جاده‌ها و هندلینگ قابل قبول.',
+                    comfortBadge: 'خوب (7/10)',
+                    comfortDesc: 'کابین کم‌صداتری نسبت به پارس سال دارد. صندلی برقی تاشو جلو حس بهتری فراهم می‌کند.',
+                    spaceBadge: 'عالی (8.5/10)',
+                    spaceDesc: 'فضای پای فوق‌العاده برای سرنشینان عقب، مناسب سفر خانواده‌ها.'
+                },
+                {
+                    id: '206-t2',
+                    name: 'پژو 206 تیپ 2',
+                    subtitle: 'هاچ‌بک شهری موتور 1.4',
+                    hp: '75 اسب بخار',
+                    engineName: 'TU3',
+                    capacity: '1360 سی‌سی',
+                    cylinders: '4 سیلندر 8 سوپاپ',
+                    tank: '50 لیتر',
+                    consumption: '6.4 لیتر / 100km',
+                    brakesBadge: 'متوسط (6.5/10)',
+                    brakesDesc: 'جلو دیسکی، عقب کاسه‌ای. مجهز به سیستم ترمز ضد قفل (ABS و EBD).',
+                    handlingBadge: 'عالی (8/10)',
+                    handlingDesc: 'فرمان‌پذیری فوق‌العاده و مانورپذیری بسیار بالا در محیط‌های شهری و ترافیک.',
+                    comfortBadge: 'ضعیف تا متوسط (5.5/10)',
+                    comfortDesc: 'صندلی‌های سفت و سیستم تعلیق نسبتاً کوبنده در چاله‌های شهری.',
+                    spaceBadge: 'ضعیف (5/10)',
+                    spaceDesc: 'فضای مناسب جلو، اما فضای پای عقب بسیار کم و تنگ برای بزرگسالان.'
+                },
+                {
+                    id: '206-t3',
+                    name: 'پژو 206 تیپ 3 (پانوراما)',
+                    subtitle: 'موتور TU3 با آپشن‌های تیپ 5',
+                    hp: '75 اسب بخار',
+                    engineName: 'TU3',
+                    capacity: '1360 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '50 لیتر',
+                    consumption: '6.4 لیتر / 100km',
+                    brakesBadge: 'خوب (7/10)',
+                    brakesDesc: 'ترمزهای بهبودیافته دیسکی جلو و کاسه‌ای عقب با EBD و ABS دقیق‌تر.',
+                    handlingBadge: 'عالی (8/10)',
+                    handlingDesc: 'فرمان پذیری چابک و پایداری مناسب در تغییر مسیرهای ناگهانی.',
+                    comfortBadge: 'خوب (7/10)',
+                    comfortDesc: 'افزوده شدن سقف شیشه‌ای (پانوراما) و تهویه اتوماتیک حس راحتی بهتری ایجاد کرده است.',
+                    spaceBadge: 'ضعیف (5/10)',
+                    spaceDesc: 'همانند تیپ 2، صندلی‌های عقب فضای محدودی دارند.'
+                },
+                {
+                    id: '206-t5',
+                    name: 'پژو 206 تیپ 5',
+                    subtitle: 'هاچ‌بک محبوب 16 سوپاپ',
+                    hp: '105 اسب بخار',
+                    engineName: 'TU5',
+                    capacity: '1587 سی‌سی',
+                    cylinders: '4 سیلندر 16V',
+                    tank: '50 لیتر',
+                    consumption: '6.6 لیتر / 100km',
+                    brakesBadge: 'عالی (8/10)',
+                    brakesDesc: 'چهار چرخ دیسکی (مدل‌های قدیمی) یا دیسکی/کاسه‌ای، عمل‌کرد فوق‌العاده ترمزگیری.',
+                    handlingBadge: 'فوق‌العاده (8.5/10)',
+                    handlingDesc: 'شتاب‌گیری عالی همراه با چسبندگی قوی به جاده در کلاس هاچ‌بک اقتصادی.',
+                    comfortBadge: 'متوسط (6/10)',
+                    comfortDesc: 'تهویه اتوماتیک خوب، اما خشکی سواری در چاله‌ها احساس می‌شود.',
+                    spaceBadge: 'ضعیف (5.5/10)',
+                    spaceDesc: 'مناسب افراد مجرد یا خانواده‌های کوچک با فرزندان کم‌سن.'
+                },
+                {
+                    id: 'peugeot-207',
+                    name: 'پژو 207i (دنده‌ای / اتومات)',
+                    subtitle: 'ارتقای یافته 206 با طراحی جدید',
+                    hp: '105 اسب بخار',
+                    engineName: 'TU5 / TU5P',
+                    capacity: '1587 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '50 لیتر',
+                    consumption: '6.6 لیتر / 100km',
+                    brakesBadge: 'عالی (8/10)',
+                    brakesDesc: 'ترمز چهار چرخ دیسکی در نسخه فول، پاسخ سریع و بازخورد مناسب پدال.',
+                    handlingBadge: 'عالی (8.5/10)',
+                    handlingDesc: 'فرمان برقی بسیار نرم و دقیق (در نسخه‌های جدید) و کنترل‌پذیری مطلوب.',
+                    comfortBadge: 'خوب (7/10)',
+                    comfortDesc: 'فرمان برقی، مالتی‌مدیا لمسی و کروز کنترل تجربه رانندگی راحت‌تری ساخته‌اند.',
+                    spaceBadge: 'ضعیف (5.5/10)',
+                    spaceDesc: 'فضای سرنشینان عقب کم است.'
+                },
+                {
+                    id: 'dena-std',
+                    name: 'دنا (معمولی)',
+                    subtitle: 'سدان ملی با موتور EF7',
+                    hp: '115 اسب بخار',
+                    engineName: 'EF7',
+                    capacity: '1648 سی‌سی',
+                    cylinders: '4 سیلندر 16 سوپاپ',
+                    tank: '60 لیتر',
+                    consumption: '7.4 لیتر / 100km',
+                    brakesBadge: 'خوب (7.5/10)',
+                    brakesDesc: 'هر چهار چرخ دیسکی مجهز به ABS و EBD عملکرد ترمزگیری مطمئنی دارد.',
+                    handlingBadge: 'خوب (7/10)',
+                    handlingDesc: 'پایداری بالا در سرعت‌های زیاد به دلیل وزن مناسب و تعلیق بهینه شده.',
+                    comfortBadge: 'خوب (7.5/10)',
+                    comfortDesc: 'صندلی‌های برقی 8 حالته، سیستم تهویه اتوماتیک و صوتی نسبتاً مدرن.',
+                    spaceBadge: 'متوسط تا خوب (7/10)',
+                    spaceDesc: 'فضای جادار جلو، ولی فضای زانوی عقب به دلیل طراحی داشبورد کمی کمتر از پارس است.'
+                },
+                {
+                    id: 'dena-plus',
+                    name: 'دنا پلاس (توربو / اتومات)',
+                    subtitle: 'پرچمدار سدان‌های ایران‌خودرو',
+                    hp: '150 اسب بخار (توربو)',
+                    engineName: 'EF7 TC',
+                    capacity: '1648 سی‌سی',
+                    cylinders: '4 سیلندر توربوشارژ',
+                    tank: '60 لیتر',
+                    consumption: '7.8 لیتر / 100km',
+                    brakesBadge: 'عالی (8.5/10)',
+                    brakesDesc: 'چهار چرخ دیسکی خنک‌شونده، سیستم‌های ترمز کمکی، گیرایی فوق‌العاده در سرعت بالا.',
+                    handlingBadge: 'خیلی خوب (8/10)',
+                    handlingDesc: 'فرمان برقی نرم، هندلینگ عالی و پایداری سنگین در اتوبان‌ها.',
+                    comfortBadge: 'عالی (8/10)',
+                    comfortDesc: 'سانروف، صندلی‌های برقی، عزل صوتی خوب کابین و گیربکس 6 سرعته نرم.',
+                    spaceBadge: 'خوب (7.5/10)',
+                    spaceDesc: 'فضای سر و پای مناسب، همراه با صندوق عقب بسیار بزرگ 500 لیتری.'
+                },
+                {
+                    id: 'runna',
+                    name: 'رانا / رانا پلاس',
+                    subtitle: 'سدان اقتصادی فیس‌لیفت 206 اس‌دی',
+                    hp: '105 اسب بخار',
+                    engineName: 'TU5 / TU5P',
+                    capacity: '1587 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '50 لیتر',
+                    consumption: '6.9 لیتر / 100km',
+                    brakesBadge: 'خوب (7/10)',
+                    brakesDesc: 'جلو دیسکی و عقب کاسه‌ای (در برخی نسخه‌های پلاس دیسکی)، ترمز ABS/EBD.',
+                    handlingBadge: 'خوب (7.5/10)',
+                    handlingDesc: 'فرمان‌پذیری نرم و دقیق، گیربکس 6 سرعته در نسخه پانوراما رانندگی جاده‌ای را راحت کرده.',
+                    comfortBadge: 'متوسط (6.5/10)',
+                    comfortDesc: 'ارتقای کیفیت غربیلک فرمان و کلیدها در رانا پلاس نسبت به مدل عادی.',
+                    spaceBadge: 'متوسط (6/10)',
+                    spaceDesc: 'صندوق عقب بزرگ 400 لیتری، اما فضای پای عقب مقداری محدود است.'
+                },
+                {
+                    id: 'tara',
+                    name: 'تارا (دنده‌ای / اتوماتیک)',
+                    subtitle: 'سدان مدرن بر پایه پلتفرم IKP1',
+                    hp: '113 اسب بخار',
+                    engineName: 'TU5P',
+                    capacity: '1587 سی‌سی',
+                    cylinders: '4 سیلندر 16V CVVT',
+                    tank: '50 لیتر',
+                    consumption: '7.0 لیتر / 100km',
+                    brakesBadge: 'فوق‌العاده (9/10)',
+                    brakesDesc: 'دیسکی در هر 4 چرخ، مجهز به ESC (کنترل پایداری)، HHC (کمک در سربالایی) و TCS.',
+                    handlingBadge: 'فوق‌العاده (9/10)',
+                    handlingDesc: 'بهترین هندلینگ در میان خودروهای ایرانی، پایداری بسیار بالا در پیچ‌های تند به لطف ESC.',
+                    comfortBadge: 'عالی (8.5/10)',
+                    comfortDesc: 'سواری بسیار نرم، عایق‌بندی صوتی خوب و صندلی‌های ارگونومیک جدید.',
+                    spaceBadge: 'فوق‌العاده (9/10)',
+                    spaceDesc: 'فضای پای شگفت‌انگیز در صندلی عقب و صندوق عقب غول‌پیکر 640 لیتری.'
+                },
+                {
+                    id: 'samand',
+                    name: 'سمند (LX / EF7)',
+                    subtitle: 'خودروی ملی مطمئن و سنگین',
+                    hp: '113 اسب بخار (EF7)',
+                    engineName: 'EF7 / XU7',
+                    capacity: '1648 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '66 لیتر',
+                    consumption: '7.5 لیتر / 100km',
+                    brakesBadge: 'متوسط (6.5/10)',
+                    brakesDesc: 'جلو دیسکی، عقب کاسه‌ای. مجهز به ABS و EBD. وزنش ترمزگیری را کمی سنگین می‌کند.',
+                    handlingBadge: 'خوب (7.5/10)',
+                    handlingDesc: 'پایداری بالا در سرعت به دلیل وزن سنگین بدنه و مرکز ثقل مناسب.',
+                    comfortBadge: 'خوب (7/10)',
+                    comfortDesc: 'صندلی‌های نرم و پهن، تعلیق بسیار نرم در جاده‌های ناهموار.',
+                    spaceBadge: 'عالی (8.5/10)',
+                    spaceDesc: 'کابین بسیار جادار برای 5 سرنشین بزرگسال و صندوق عقب 500 لیتری.'
+                },
+                {
+                    id: 'haima-s7',
+                    name: 'هایما S7 پلاس توربو',
+                    subtitle: 'کراس‌اور شاسی‌بلند مونتاژی',
+                    hp: '170 اسب بخار',
+                    engineName: '1.8 Turbo',
+                    capacity: '1792 سی‌سی',
+                    cylinders: '4 سیلندر توربو',
+                    tank: '61 لیتر',
+                    consumption: '8.6 لیتر / 100km',
+                    brakesBadge: 'عالی (8.5/10)',
+                    brakesDesc: 'چهار چرخ دیسکی مجهز به سیستم ترمز کمکی BAS، کنترل پایداری ESP و ضد لغزش.',
+                    handlingBadge: 'خیلی خوب (8/10)',
+                    handlingDesc: 'سواری نرم نسبت به شاسی‌بلند بودن و تسلط عالی راننده به جاده.',
+                    comfortBadge: 'فوق‌العاده (9/10)',
+                    comfortDesc: 'گرم‌کن صندلی‌های جلو، صندلی چرمی، دوربین 360 درجه و تعلیق مستقل نرم.',
+                    spaceBadge: 'فوق‌العاده (9/10)',
+                    spaceDesc: 'فضای سر و پای کاملاً آزاد برای تمام سرنشینان در سفرهای طولانی.'
+                }
+            ],
+            saipa: [
+                {
+                    id: 'pride-111',
+                    name: 'پراید 111 (هاچ‌بک)',
+                    subtitle: 'خودروی شهری کم‌مصرف',
+                    hp: '71 اسب بخار',
+                    engineName: 'M13 تقویت‌شده',
+                    capacity: '1323 سی‌سی',
+                    cylinders: '4 سیلندر 8 سوپاپ',
+                    tank: '37 لیتر',
+                    consumption: '6.4 لیتر / 100km',
+                    brakesBadge: 'ضعیف (5/10)',
+                    brakesDesc: 'جلو دیسکی، عقب کاسه‌ای، مجهز به ABS پایه. ترمزگیری در سرعت‌های بالا ضعیف است.',
+                    handlingBadge: 'ضعیف (5/10)',
+                    handlingDesc: 'بدنه سبک و پایداری کم در سرپیچ‌ها و سرعت‌های بالاش بالاتر از 100 کیلومتر.',
+                    comfortBadge: 'ضعیف (4.5/10)',
+                    comfortDesc: 'صندلی‌های ساده بدون ارگونومی مناسب، نفوذ صدای محیط و موتور به کابین.',
+                    spaceBadge: 'متوسط (6/10)',
+                    spaceDesc: 'فضای جلو مناسب، فضای عقب محدود و صندوق عقب کوچک 200 لیتری.'
+                },
+                {
+                    id: 'pride-131',
+                    name: 'پراید 131 (سدان)',
+                    subtitle: 'سدان اقتصادی و پرفروش',
+                    hp: '71 اسب بخار',
+                    engineName: 'M13 Euro 4',
+                    capacity: '1323 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '37 لیتر',
+                    consumption: '6.5 لیتر / 100km',
+                    brakesBadge: 'ضعیف (5/10)',
+                    brakesDesc: 'ترمز جلو دیسکی و عقب کاسه‌ای با سیستم ABS.',
+                    handlingBadge: 'ضعیف (5/10)',
+                    handlingDesc: 'مناسب برای رفت‌وآمدهای شهری با سرعت مطمئنه.',
+                    comfortBadge: 'ضعیف (4.5/10)',
+                    comfortDesc: 'تعلیق ساده، کیفیت متریال داشبورد سخت و خشک.',
+                    spaceBadge: 'متوسط (6.5/10)',
+                    spaceDesc: 'صندوق عقب با ظرفیت 360 لیتر که برای استفاده روزمره مناسب است.'
+                },
+                {
+                    id: 'pride-141',
+                    name: 'پراید 141 (لیفت‌بک)',
+                    subtitle: 'مدل لیفت‌بک خانواده پراید',
+                    hp: '71 اسب بخار',
+                    engineName: 'M13',
+                    capacity: '1323 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '37 لیتر',
+                    consumption: '6.6 لیتر / 100km',
+                    brakesBadge: 'ضعیف (5/10)',
+                    brakesDesc: 'دیسکی جلو و کاسه‌ای عقب با عملکرد معمولی.',
+                    handlingBadge: 'ضعیف (5/10)',
+                    handlingDesc: 'مشابه سایر مدل‌های خانواده پراید با تعادل محدود.',
+                    comfortBadge: 'ضعیف (5/10)',
+                    comfortDesc: 'طراحی متفاوت داشبورد نسبت به 131 ولی با همان میزان راحتی.',
+                    spaceBadge: 'خوب (7/10)',
+                    spaceDesc: 'دسترسی راحت‌تر به صندوق عقب به دلیل درِ باز شونده لیفت‌بک.'
+                },
+                {
+                    id: 'pride-151',
+                    name: 'پراید وانت (151)',
+                    subtitle: 'وانت کاربری سبک شهری',
+                    hp: '71 اسب بخار',
+                    engineName: 'M13 تقویت‌شده',
+                    capacity: '1323 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '37 لیتر',
+                    consumption: '6.6 لیتر / 100km',
+                    brakesBadge: 'متوسط (5.5/10)',
+                    brakesDesc: 'ترمزهای تقویت‌شده به دلیل قابلیت حمل بار تا 500 کیلوگرم.',
+                    handlingBadge: 'ضعیف (5/10)',
+                    handlingDesc: 'در حالت خالی بودن بار، قسمت عقب ماشین کمی گیج و سبک می‌زند.',
+                    comfortBadge: 'ضعیف (4/10)',
+                    comfortDesc: 'کابین دو نفره محدود، صندلی‌ها قابلیت خواباندن زیاد ندارند.',
+                    spaceBadge: 'اختصاصی بار (7/10)',
+                    spaceDesc: 'فضای بار مناسب برای توزیع کالا در داخل شهر.'
+                },
+                {
+                    id: 'quick-std',
+                    name: 'کوییک (دنده‌ای / R / S)',
+                    subtitle: 'هاچ‌بک کراس محبوب سایپا',
+                    hp: '87 اسب بخار',
+                    engineName: 'M15',
+                    capacity: '1503 سی‌سی',
+                    cylinders: '4 سیلندر 8 سوپاپ',
+                    tank: '41 لیتر',
+                    consumption: '7.1 لیتر / 100km',
+                    brakesBadge: 'متوسط (6.5/10)',
+                    brakesDesc: 'جلو دیسکی خنک‌شونده، عقب کاسه‌ای، سیستم ترمز ABS + EBD.',
+                    handlingBadge: 'متوسط (6.5/10)',
+                    handlingDesc: 'ارتفاع بیشتر از سطح زمین مانور شهری را آسان کرده اما در پیچ‌ها کمی بدنه متمایل می‌شود.',
+                    comfortBadge: 'متوسط (6/10)',
+                    comfortDesc: 'تهویه نیمه‌اتوماتیک، صندلی‌های معمولی با روکش پارچه‌ای.',
+                    spaceBadge: 'متوسط (6.5/10)',
+                    spaceDesc: 'فضای کابین جادارتر از ۲۰۶، صندوق عقب ۲۲۵ لیتری.'
+                },
+                {
+                    id: 'quick-auto',
+                    name: 'کوییک اتوماتیک (پلاس)',
+                    subtitle: 'ارزان‌ترین خودروی اتومات بازار',
+                    hp: '87 اسب بخار',
+                    engineName: 'M15',
+                    capacity: '1503 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '41 لیتر',
+                    consumption: '7.7 لیتر / 100km',
+                    brakesBadge: 'خوب (7/10)',
+                    brakesDesc: 'ترمزهای دیسکی جلو و کاسه‌ای عقب مجهز به سیستم کمکی BAS.',
+                    handlingBadge: 'متوسط (6.5/10)',
+                    handlingDesc: 'مجهز به فرمان برقی (EPS) فوق‌العاده نرم برای پارک شهری.',
+                    comfortBadge: 'خوب (7/10)',
+                    comfortDesc: 'ورود بدون کلید (کی‌لس)، استارت دکمه‌ای، کروز کنترل و مانیتور لمسی.',
+                    spaceBadge: 'متوسط (6.5/10)',
+                    spaceDesc: 'فضای پا برای ۴ سرنشین مناسب است.'
+                },
+                {
+                    id: 'saina-std',
+                    name: 'ساینا (دنده‌ای / S)',
+                    subtitle: 'سدان اقتصادی خانواده',
+                    hp: '87 اسب بخار',
+                    engineName: 'M15 / M15GSI',
+                    capacity: '1503 سی‌سی',
+                    cylinders: '4 سیلندر',
+                    tank: '41 لیتر',
+                    consumption: '7.0 لیتر / 100km',
+                    brakesBadge: 'متوسط (6.5/10)',
+                    brakesDesc: 'ترمز دیسکی جلو و کاسه‌ای عقب همراه با سیستم ABS و EBD.',
+                    handlingBadge: 'متوسط (6.5/10)',
+                    handlingDesc: 'فرمان هیدرولیک (یا برقی در نسخه S)، تعادل خوب در سرعت‌های قانونی.',
+                    comfortBadge: 'متوسط (6/10)',
+                    comfortDesc: 'طراحی به روزتر داشبورد در نسخه S و صفحه کیلومتر جدید.',
+                    spaceBadge: 'خوب (7.5/10)',
+                    spaceDesc: 'فضای سر و پای مناسب برای سرنشینان عقب و صندوق ۳۷۰ لیتری.'
+                },
+                {
+                    id: 'atlas',
+                    name: 'اطلس (Atlas G)',
+                    subtitle: 'فیس‌لیفت مدرن کوییک با طراحی جدید',
+                    hp: '90 اسب بخار',
+                    engineName: 'M15GSI (VVT)',
+                    capacity: '1503 سی‌سی',
+                    cylinders: '4 سیلندر با زمان‌بندی متغیر سوپاپ',
+                    tank: '41 لیتر',
+                    consumption: '6.8 لیتر / 100km',
+                    brakesBadge: 'خوب (7.5/10)',
+                    brakesDesc: 'دیسکی جلو، کاسه‌ای عقب، مجهز به سیستم کنترل پایداری ESC و HSA.',
+                    handlingBadge: 'خوب (7.5/10)',
+                    handlingDesc: 'هندلینگ بهبودیافته با عایق‌بندی بهتر شاسی و فرمان برقی نرم.',
+                    comfortBadge: 'خوب (7.5/10)',
+                    comfortDesc: 'سانروف برقی، صندلی‌های چرم و پارچه، نمایشگر ۷ اینچ و آنتن کوسه‌ای.',
+                    spaceBadge: 'متوسط (6.5/10)',
+                    spaceDesc: 'ابعاد مشابه کوییک با بهینه‌سازی ارگونومی صندلی‌ها.'
+                },
+                {
+                    id: 'sahand',
+                    name: 'سهند (Sahand)',
+                    subtitle: 'سدان جدید سایپا بر پایه پلتفرم X200',
+                    hp: '90 اسب بخار',
+                    engineName: 'M15GSI',
+                    capacity: '1503 سی‌سی',
+                    cylinders: '4 سیلندر 8V VVT',
+                    tank: '41 لیتر',
+                    consumption: '6.8 لیتر / 100km',
+                    brakesBadge: 'خوب (7.5/10)',
+                    brakesDesc: 'مجهز به سیستم کنترل پایداری الکترونیکی (ESC) و ترمز کمکی.',
+                    handlingBadge: 'خوب (7.5/10)',
+                    handlingDesc: 'فرمان‌پذیری نرم‌تر و پایداری بیشتر در پیچ‌ها نسبت به ساینا.',
+                    comfortBadge: 'خوب (7.5/10)',
+                    comfortDesc: 'تریم داخلی دو رنگ، طراحی شیک داشبورد و صندلی‌های راحت‌تر.',
+                    spaceBadge: 'خوب (7.5/10)',
+                    spaceDesc: 'فضای کافی برای خانواده‌های ۴ نفره به همراه صندوق عقب کاربردی.'
+                },
+                {
+                    id: 'shahin-manual',
+                    name: 'شاهین (دنده‌ای / G)',
+                    subtitle: 'سدان سایز متوسط با موتور توربو',
+                    hp: '110 اسب بخار',
+                    engineName: 'M15TC Turbo',
+                    capacity: '1497 سی‌سی',
+                    cylinders: '4 سیلندر توربوشارژ',
+                    tank: '47 لیتر',
+                    consumption: '7.5 لیتر / 100km',
+                    brakesBadge: 'فوق‌العاده (8.5/10)',
+                    brakesDesc: 'هر چهار چرخ دیسکی بزرگ، عملکرد عالی در ترمزگیری‌های شدید به همراه ABS و EBD.',
+                    handlingBadge: 'عالی (8.5/10)',
+                    handlingDesc: 'پلتفرم جدید SP100 پایداری و چسبندگی فوق‌العاده‌ای به خودرو در سرعت‌های بالا داده است.',
+                    comfortBadge: 'عالی (8/10)',
+                    comfortDesc: 'سانروف، استارت کی‌لس، سانروف برقی، تهویه اتوماتیک و دوربین عقب.',
+                    spaceBadge: 'فوق‌العاده (9/10)',
+                    spaceDesc: 'فضای پای فوق‌العاده جادار عقب و صندوق عقب بزرگ 420 لیتری.'
+                },
+                {
+                    id: 'shahin-auto',
+                    name: 'شاهین اتوماتیک (CVT / ME16)',
+                    subtitle: 'لوکس‌ترین محصول سایپا',
+                    hp: '112 اسب بخار / 115 اسب بخار',
+                    engineName: 'M15TC / ME16 16V',
+                    capacity: '1598 سی‌سی',
+                    cylinders: '4 سیلندر 16 سوپاپ',
+                    tank: '47 لیتر',
+                    consumption: '7.3 لیتر / 100km',
+                    brakesBadge: 'فوق‌العاده (9/10)',
+                    brakesDesc: 'چهار چرخ دیسکی مجهز به سیستم کنترل پایداری ESC، کنترل کشش TCS و کمک سربالایی.',
+                    handlingBadge: 'فوق‌العاده (9/10)',
+                    handlingDesc: 'سواری بسار نرم و مطمئن با فرمان برقی متغیر با سرعت.',
+                    comfortBadge: 'فوق‌العاده (8.5/10)',
+                    comfortDesc: 'کابین بسیار کم صدا، گیربکس اتوماتیک نرم، کروز کنترل و مولتی‌مدیا ۱۰ اینچ.',
+                    spaceBadge: 'فوق‌العاده (9/10)',
+                    spaceDesc: 'فضای بسیار عالی برای سرنشینان در مسافرت‌های طولانی.'
+                }
+            ]
+        };
+
+        // Navigation State Management
+        let currentStep = 'companies'; // 'companies', 'car-list', 'car-details'
+        let selectedCompanyKey = null;
+        let selectedCarObj = null;
+
+        // Dark Mode Controller
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-amber-500';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon text-gray-200';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize Theme preference
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+            document.getElementById('theme-icon').className = 'fa-solid fa-sun text-amber-500';
+        }
+
+        // Select Company Action
+        function selectCompany(companyKey) {
+            selectedCompanyKey = companyKey;
+            currentStep = 'car-list';
+            
+            // Render Cars
+            renderCarList(database[companyKey]);
+
+            // Header Update
+            const companyBadge = document.getElementById('company-name-badge');
+            if (companyKey === 'ikco') {
+                companyBadge.textContent = 'ایران‌خودرو (IKCO)';
+                companyBadge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300';
+            } else {
+                companyBadge.textContent = 'سایپا (SAIPA)';
+                companyBadge.className = 'text-xs font-bold px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300';
+            }
+
+            document.getElementById('search-input').value = '';
+            showStep('step-car-list');
+            document.getElementById('btn-back').classList.remove('hidden');
+        }
+
+        // Render Car List
+        function renderCarList(cars) {
+            const container = document.getElementById('cars-container');
+            const countBadge = document.getElementById('car-count');
+            container.innerHTML = '';
+            
+            countBadge.textContent = `${cars.length} خودرو یافت شد`;
+
+            cars.forEach(car => {
+                const isIKCO = selectedCompanyKey === 'ikco';
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border bg-white dark:bg-gray-800/90 shadow-sm hover:shadow-md cursor-pointer active:scale-[0.99] transition flex items-center justify-between ${
+                    isIKCO ? 'border-gray-100 dark:border-gray-700/60 hover:border-blue-500' : 'border-gray-100 dark:border-gray-700/60 hover:border-orange-500'
+                }`;
+                card.onclick = () => showCarDetails(car);
+
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <h4 class="font-bold text-sm text-gray-900 dark:text-white">${car.name}</h4>
+                        <p class="text-xs text-gray-400">${car.subtitle}</p>
+                        <div class="flex items-center gap-2 pt-1">
+                            <span class="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-medium">${car.engineName}</span>
+                            <span class="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-medium">${car.hp}</span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full ${isIKCO ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'} flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Cars Function
+        function filterCars() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const filtered = database[selectedCompanyKey].filter(car => 
+                car.name.toLowerCase().includes(query) || 
+                car.subtitle.toLowerCase().includes(query) ||
+                car.engineName.toLowerCase().includes(query)
+            );
+            renderCarList(filtered);
+        }
+
+        // Show Car Details
+        function showCarDetails(car) {
+            selectedCarObj = car;
+            currentStep = 'car-details';
+
+            const isIKCO = selectedCompanyKey === 'ikco';
+
+            // Header styling based on company
+            const headerCard = document.getElementById('details-header-card');
+            headerCard.className = `rounded-2xl p-5 text-white shadow-lg relative overflow-hidden bg-gradient-to-r ${
+                isIKCO ? 'from-blue-700 to-blue-900' : 'from-orange-600 to-red-700'
+            }`;
+
+            document.getElementById('detail-company-tag').textContent = isIKCO ? 'ایران خودرو' : 'سایپا';
+            document.getElementById('detail-car-name').textContent = car.name;
+            document.getElementById('detail-car-subtitle').textContent = car.subtitle;
+
+            // Specifications Fill
+            document.getElementById('spec-hp').textContent = car.hp;
+            document.getElementById('spec-engine-name').textContent = car.engineName;
+            document.getElementById('spec-capacity').textContent = car.capacity;
+            document.getElementById('spec-cylinders').textContent = car.cylinders;
+            document.getElementById('spec-tank').textContent = car.tank;
+            document.getElementById('spec-consumption').textContent = car.consumption;
+
+            // Comfort & Safety
+            document.getElementById('spec-brakes-badge').textContent = car.brakesBadge;
+            document.getElementById('spec-brakes-desc').textContent = car.brakesDesc;
+
+            document.getElementById('spec-handling-badge').textContent = car.handlingBadge;
+            document.getElementById('spec-handling-desc').textContent = car.handlingDesc;
+
+            document.getElementById('spec-comfort-badge').textContent = car.comfortBadge;
+            document.getElementById('spec-comfort-desc').textContent = car.comfortDesc;
+
+            document.getElementById('spec-space-badge').textContent = car.spaceBadge;
+            document.getElementById('spec-space-desc').textContent = car.spaceDesc;
+
+            showStep('step-car-details');
+        }
+
+        // Navigation Back Button Logic
+        function goBack() {
+            if (currentStep === 'car-details') {
+                currentStep = 'car-list';
+                showStep('step-car-list');
+            } else if (currentStep === 'car-list') {
+                currentStep = 'companies';
+                showStep('step-companies');
+                document.getElementById('btn-back').classList.add('hidden');
+            }
+        }
+
+        // Screen Step Controller
+        function showStep(stepId) {
+            document.getElementById('step-companies').classList.add('hidden');
+            document.getElementById('step-car-list').classList.add('hidden');
+            document.getElementById('step-car-details').classList.add('hidden');
+
+            const activeStep = document.getElementById(stepId);
+            activeStep.classList.remove('hidden');
+            
+            // Scroll to top of content
+            document.getElementById('main-content').scrollTop = 0;
+        }
+    </script>
+</body>
+</html>
